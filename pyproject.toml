@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "cpp_preparation"
+version = "0.1.0"
+description = "C++ learning and documentation environment"
+authors = ["Your Name <your@email.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+jupyter = "*"
+notebook = "*"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
