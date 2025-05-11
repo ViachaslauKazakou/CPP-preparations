@@ -95,25 +95,69 @@ int main() {
     std::string user_filename;
     std::cout << "Введите имя файла для парсинга (Enter для input.txt): ";
     std::getline(std::cin, user_filename);
+    std::string command;
 
     if (user_filename.empty()) {
         user_filename = "input.txt";
     }
-
     TextFileProcessor tfp(user_filename);
-    std::cout << "Слово 'рак' встречается: " << tfp.find_word("рак") << " раз(а)\n";
-    std::cout << "Всего слов: " << tfp.word_count() << std::endl;
-    std::cout << "Размер файла: " << tfp.size() << " символов\n";
+
+    // Получаем токены из очищенного файла
+    std::vector<std::string> tokens = tfp.get_tokens_from_file("output.txt");
+
+    while (true) {
+        std::cout << "\nБот: Какую команду ты хочешь выполнить? (введите \"помощь\" для списка команд)" << std::endl;
+        std::cout << "Бот: Вводи команду (или \"выход\" для завершения): ";
+        std::cout << "\nТы: ";
+        std::getline(std::cin, command);
+
+        if (command == "search"  || command == "find") {
+            std::cout << "Бот: Enter word for search!";
+            std::string find_word;
+            std::getline(std::cin, find_word);
+            std::cout << "Слово "<< find_word << " встречается: " << tfp.find_word(find_word) << " раз(а)\n";
+
+        } else if (command == "count") {
+            std::cout << "Number of tokens in file: " << tfp.word_count() << std::endl;
+        
+        } else if (command == "size") {
+            std::cout << "Размер файла: " << tfp.size() << " символов\n";
+        
+        } else if (command == "remove") {
+            std::cout << "Бот: Enter chars for remove!";
+            std::string chars_to_remove;
+            std::getline(std::cin, chars_to_remove);
+            tfp.remove_chars_and_save(chars_to_remove, "output.txt");
+            std::cout << "Удалены символы: " << chars_to_remove << "\n";
+        
+        } else if (command == "tokens") {
+            std::cout << "Токены из output.txt:\n";
+            for (const auto& token : tokens) {
+                std::cout << token <<  "";
+            }
+            std::cout << std::endl;
+
+        } else if (command == "save") {
+            tfp.save_tokens_to_file(tokens, "tokens.txt");
+            std::cout << "Токены сохранены в файл tokens.txt\n";
+
+        } else if (command == "помощь" || command == "help") {
+            std::cout << "Бот: Возможные команды: \"search\", \"count\", \"size\", \"remove\", \"tokens\", \"save\", \"выход\".";
+        } else if (command == "выход" || command == "exit" || command == "quit" || command == "q") {
+            std::cout << "Пока! 👋" << std::endl;
+            break;
+        }
+    }
+
     // tfp.remove_chars_and_save("«»\"'`,.!?;:—()-[]{}<>", "output.txt");
     tfp.remove_chars_and_save(",.!?-()-", "output.txt");
 
     // Получаем токены из очищенного файла
-    std::vector<std::string> tokens = tfp.get_tokens_from_file("output.txt");
     std::cout << "Токены из output.txt:\n";
     for (const auto& token : tokens) {
-        std::cout << token << std::endl;
+        std::cout << token <<  " ";
     }
-
+    std::cout << std::endl;
     // Сохраняем токены в файл tokens.txt
     tfp.save_tokens_to_file(tokens, "tokens.txt");
 
